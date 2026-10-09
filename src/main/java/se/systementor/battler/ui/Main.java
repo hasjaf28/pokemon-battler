@@ -235,10 +235,10 @@ public class Main {
                 "Vilken Pokémon vill du ta bort? (1-" + pokedex.size() + "): ", 1, pokedex.size()) - 1;
         Pokemon pokemon = pokedex.get(index);
 
-        boolean deleting = InputHelper.readYesNo(input, "Är du säker på borttagning av " + pokemon.name + "?");
+        boolean deleting = InputHelper.readYesNo(input, "Är du säker på borttagning av " + pokemon.getName() + "?");
         if (deleting) {
             pokedex.remove(index);
-            System.out.println("Borttagning av " + pokemon.name + " genomfördes!");
+            System.out.println("Borttagning av " + pokemon.getName() + " genomfördes!");
         } else {
             System.out.println("Borttagningen avbröts!");
         }
@@ -248,15 +248,15 @@ public class Main {
         try (BufferedWriter fileWriter = Files.newBufferedWriter(path)) {
             for (Pokemon pokemon : pokedex) {
                 String attacksPart = "";
-                for (int i = 0; i < pokemon.attacks.size(); i++) {
+                for (int i = 0; i < pokemon.getAttacks().size(); i++) {
                     if (i > 0) {
                         attacksPart = attacksPart + ";";
                     }
-                    Attack attack = pokemon.attacks.get(i);
+                    Attack attack = pokemon.getAttacks().get(i);
                     attacksPart = attacksPart + attack.name + ":" + attack.type + ":" + attack.baseDamage + ":" + attack.accuracy;
                 }
-                fileWriter.write(pokemon.name + ", " + pokemon.type + ", "
-                        + pokemon.maxHp + ", " + pokemon.currentHp + ", " + attacksPart);
+                fileWriter.write(pokemon.getName() + ", " + pokemon.getType() + ", "
+                        + pokemon.getMaxHp() + ", " + pokemon.getCurrentHp() + ", " + attacksPart);
                 fileWriter.newLine();
             }
             System.out.println("Pokédexen har sparats till " + path.toAbsolutePath());
@@ -289,7 +289,7 @@ public class Main {
                     String attacksPart = fields[4];
 
                     Pokemon pokemon = new Pokemon(name, type, maxHp);
-                    pokemon.currentHp = currentHp;
+                    pokemon.setCurrentHp(currentHp);
 
                     String[] attackParts = attacksPart.split(";");
                     for (String attackPart : attackParts) {
@@ -301,7 +301,7 @@ public class Main {
                         Type attackType = Type.valueOf(attack[1]);
                         int baseDamage = Integer.parseInt(attack[2]);
                         int accuracy = Integer.parseInt(attack[3]);
-                        pokemon.attacks.add(new Attack(attackName, attackType, baseDamage, accuracy));
+                        pokemon.getAttacks().add(new Attack(attackName, attackType, baseDamage, accuracy));
                     }
                     result.add(pokemon);
                 } catch (Exception e) {

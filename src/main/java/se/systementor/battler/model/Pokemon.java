@@ -42,4 +42,9 @@ public class Pokemon {
             currentHp = maxHp;
         }
     }
+    public void setCurrentHp( int value) {
+        if (value < 0) value = 0;
+        if (value > maxHp) value = maxHp;
+        this.currentHp = value;
+    }
 }
