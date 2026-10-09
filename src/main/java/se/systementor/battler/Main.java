@@ -1,6 +1,10 @@
 package se.systementor.battler;
 
 
+import se.systementor.battler.model.Attack;
+import se.systementor.battler.model.Pokemon;
+import se.systementor.battler.model.Type;
+
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.nio.file.Path;
