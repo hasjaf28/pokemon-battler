@@ -1,4 +1,4 @@
-package se.systementor.battler;
+package se.systementor.battler.ui;
 
 import java.util.Scanner;
 
