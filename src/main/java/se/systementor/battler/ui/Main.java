@@ -74,7 +74,7 @@ public class Main {
         for (int i = 0; i < pokedex.size(); i++) {
             Pokemon p = pokedex.get(i);
             System.out.printf("%d. %-12s | Type: %-8s | HP: %d/%d | Attacker: %d%n",
-                    i + 1, p.name, p.type, p.currentHp, p.maxHp, p.attacks.size());
+                    i + 1, p.getName(), p.getType(), p.getCurrentHp(), p.getMaxHp(), p.getAttacks().size());
         }
     }
 
@@ -82,33 +82,33 @@ public class Main {
         ArrayList<Pokemon> seed = new ArrayList<>();
 
         Pokemon pikachu = new Pokemon("Pikachu", Type.ELECTRIC, 95);
-        pikachu.attacks.add(new Attack("Thunderbolt", Type.ELECTRIC, 120, 100));
-        pikachu.attacks.add(new Attack("Ironfist", Type.NORMAL, 140, 88));
+        pikachu.getAttacks().add(new Attack("Thunderbolt", Type.ELECTRIC, 120, 100));
+        pikachu.getAttacks().add(new Attack("Ironfist", Type.NORMAL, 140, 88));
         seed.add(pikachu);
 
         Pokemon charizard = new Pokemon("Charizard", Type.FIRE, 180);
-        charizard.attacks.add(new Attack("Fire Blast", Type.FIRE, 180, 90));
-        charizard.attacks.add(new Attack("Iron Claw", Type.NORMAL, 150, 95));
+        charizard.getAttacks().add(new Attack("Fire Blast", Type.FIRE, 180, 90));
+        charizard.getAttacks().add(new Attack("Iron Claw", Type.NORMAL, 150, 95));
         seed.add(charizard);
 
         Pokemon arceus = new Pokemon("Arceus", Type.NORMAL, 360);
-        arceus.attacks.add(new Attack("Doomsday", Type.NORMAL, 240, 98));
-        arceus.attacks.add(new Attack("Impactish", Type.NORMAL, 170, 80));
+        arceus.getAttacks().add(new Attack("Doomsday", Type.NORMAL, 240, 98));
+        arceus.getAttacks().add(new Attack("Impactish", Type.NORMAL, 170, 80));
         seed.add(arceus);
 
         Pokemon gyarados = new Pokemon("Gyarados", Type.WATER, 230);
-        gyarados.attacks.add(new Attack("Ronin", Type.WATER, 220, 95));
-        gyarados.attacks.add(new Attack("Water splash", Type.WATER, 170, 75));
+        gyarados.getAttacks().add(new Attack("Ronin", Type.WATER, 220, 95));
+        gyarados.getAttacks().add(new Attack("Water splash", Type.WATER, 170, 75));
         seed.add(gyarados);
 
         Pokemon snorlax = new Pokemon("Snorlax", Type.GRASS, 380);
-        snorlax.attacks.add(new Attack("Snuvan", Type.NORMAL, 190, 80));
-        snorlax.attacks.add(new Attack("Normal Impact", Type.NORMAL, 70, 100));
+        snorlax.getAttacks().add(new Attack("Snuvan", Type.NORMAL, 190, 80));
+        snorlax.getAttacks().add(new Attack("Normal Impact", Type.NORMAL, 70, 100));
         seed.add(snorlax);
 
         Pokemon thanos = new Pokemon("Thanos", Type.FIRE, 450);
-        thanos.attacks.add(new Attack("Power Stone", Type.FIRE, 480, 98));
-        thanos.attacks.add(new Attack("Soul Catcher", Type.NORMAL, 290, 90));
+        thanos.getAttacks().add(new Attack("Power Stone", Type.FIRE, 480, 98));
+        thanos.getAttacks().add(new Attack("Soul Catcher", Type.NORMAL, 290, 90));
         seed.add(thanos);
 
         return seed;
@@ -123,11 +123,11 @@ public class Main {
         int numberOfAttacks = InputHelper.readIntInRange(input, "Hur många attacker vill du lägga till (1-4)? ",
                 1, 4);
         for (int i = 0; i < numberOfAttacks; i++) {
-            pokemon.attacks.add(askForNewAttack(input));
+            pokemon.getAttacks().add(askForNewAttack(input));
         }
 
         pokedex.add(pokemon);
-        System.out.println(pokemon.name + " har lagts till!");
+        System.out.println(pokemon.getName() + " har lagts till!");
     }
 
     public static Type askForType(Scanner input) {
@@ -148,8 +148,8 @@ public class Main {
     }
 
     public static void printAttacks(Pokemon pokemon) {
-        for (int i = 0; i < pokemon.attacks.size(); i++) {
-            System.out.println((i + 1) + ". " + pokemon.attacks.get(i).name);
+        for (int i = 0; i < pokemon.getAttacks().size(); i++) {
+            System.out.println((i + 1) + ". " + pokemon.getAttacks().get(i).name);
         }
     }
 
@@ -167,7 +167,7 @@ public class Main {
         boolean editing = true;
         while (editing) {
             System.out.println();
-            System.out.println("Redigerar: " + pokemon.name);
+            System.out.println("Redigerar: " + pokemon.getName());
             System.out.println("1. Ändra namn");
             System.out.println("2. Ändra type");
             System.out.println("3. Ändra max HP");
@@ -178,50 +178,47 @@ public class Main {
             int choice = InputHelper.readIntInRange(input, "Välj: ", 1, 6);
             switch (choice) {
                 case 1 -> {
-                    String oldName = pokemon.name;
-                    pokemon.name = InputHelper.readValidName(input, "Nytt namn: ");
-                    System.out.println("Namnet ändrades från " + oldName + " till " + pokemon.name + "!");
+                    String oldName = pokemon.getName();
+                    pokemon.setName(InputHelper.readValidName(input, "Nytt namn: "));
+                    System.out.println("Namnet ändrades från " + oldName + " till " + pokemon.getName() + "!");
                 }
                 case 2 -> {
-                    Type oldType = pokemon.type;
-                    pokemon.type = askForType(input);
-                    System.out.println("Typen ändrades från " + oldType + " till " + pokemon.type + "!");
+                    Type oldType = pokemon.getType();
+                    pokemon.setType(askForType(input));
+                    System.out.println("Typen ändrades från " + oldType + " till " + pokemon.getType() + "!");
                 }
                 case 3 -> {
-                    int oldHp = pokemon.maxHp;
+                    int oldHp = pokemon.getMaxHp();
                     int newMaxHp = InputHelper.readIntInRange(input, "Nytt max HP (1-1000): ", 1, 1000);
-                    pokemon.maxHp = newMaxHp;
-                    if (pokemon.currentHp > newMaxHp) {
-                        pokemon.currentHp = newMaxHp;
-                    }
-                    System.out.println("Max HP har ändrats från " + oldHp + " till " + pokemon.maxHp + "!");
+                    pokemon.setMaxHp(newMaxHp);
+                    System.out.println("Max HP har ändrats från " + oldHp + " till " + pokemon.getMaxHp() + "!");
                 }
                 case 4 -> {
-                    if (pokemon.attacks.size() >= 4) {
+                    if (pokemon.getAttacks().size() >= 4) {
                         System.out.println("Den här Pokémonen har redan 4 attacker. Du kan inte lägga till fler!");
                     } else {
                         Attack newAttack = askForNewAttack(input);
-                        pokemon.attacks.add(newAttack);
+                        pokemon.getAttacks().add(newAttack);
                         System.out.println("Attacken \"" + newAttack.name + "\" har lagts till!");
                     }
                 }
                 case 5 -> {
-                    if (pokemon.attacks.size() <= 1) {
+                    if (pokemon.getAttacks().size() <= 1) {
                         System.out.println("En Pokémon måste ha minst en attack. Den enda attacken får inte tas bort!");
                     } else {
                         printAttacks(pokemon);
                         int attackIndex = InputHelper.readIntInRange(input,
-                                "Vilken attack vill du ta bort? (1-" + pokemon.attacks.size() + "): ",
-                                1, pokemon.attacks.size()) - 1;
+                                "Vilken attack vill du ta bort? (1-" + pokemon.getAttacks().size() + "): ",
+                                1, pokemon.getAttacks().size()) - 1;
 
-                        String removedName = pokemon.attacks.get(attackIndex).name;
-                        pokemon.attacks.remove(attackIndex);
+                        String removedName = pokemon.getAttacks().get(attackIndex).name;
+                        pokemon.getAttacks().remove(attackIndex);
                         System.out.println("Attacken " + removedName + " har tagits bort!");
                     }
                 }
                 case 6 -> {
                     editing = false;
-                    System.out.println("Redigeringen är klar för " + pokemon.name + "!");
+                    System.out.println("Redigeringen är klar för " + pokemon.getName() + "!");
                 }
             }
         }
