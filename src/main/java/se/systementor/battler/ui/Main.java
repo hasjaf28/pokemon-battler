@@ -149,7 +149,7 @@ public class Main {
 
     public static void printAttacks(Pokemon pokemon) {
         for (int i = 0; i < pokemon.getAttacks().size(); i++) {
-            System.out.println((i + 1) + ". " + pokemon.getAttacks().get(i).name);
+            System.out.println((i + 1) + ". " + pokemon.getAttacks().get(i).getName());
         }
     }
 
@@ -199,7 +199,7 @@ public class Main {
                     } else {
                         Attack newAttack = askForNewAttack(input);
                         pokemon.getAttacks().add(newAttack);
-                        System.out.println("Attacken \"" + newAttack.name + "\" har lagts till!");
+                        System.out.println("Attacken \"" + newAttack.getName() + "\" har lagts till!");
                     }
                 }
                 case 5 -> {
@@ -211,7 +211,7 @@ public class Main {
                                 "Vilken attack vill du ta bort? (1-" + pokemon.getAttacks().size() + "): ",
                                 1, pokemon.getAttacks().size()) - 1;
 
-                        String removedName = pokemon.getAttacks().get(attackIndex).name;
+                        String removedName = pokemon.getAttacks().get(attackIndex).getName();
                         pokemon.getAttacks().remove(attackIndex);
                         System.out.println("Attacken " + removedName + " har tagits bort!");
                     }
@@ -253,7 +253,8 @@ public class Main {
                         attacksPart = attacksPart + ";";
                     }
                     Attack attack = pokemon.getAttacks().get(i);
-                    attacksPart = attacksPart + attack.name + ":" + attack.type + ":" + attack.baseDamage + ":" + attack.accuracy;
+                    attacksPart = attacksPart + attack.getName() + ":" +
+                            attack.getType() + ":" + attack.getBaseDamage() + ":" + attack.getAccuracy();
                 }
                 fileWriter.write(pokemon.getName() + ", " + pokemon.getType() + ", "
                         + pokemon.getMaxHp() + ", " + pokemon.getCurrentHp() + ", " + attacksPart);
