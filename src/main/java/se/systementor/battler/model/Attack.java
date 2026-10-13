@@ -11,10 +11,10 @@ public class Attack {
             throw new IllegalArgumentException("Tomt namn");
         if (type == null)
             throw new IllegalArgumentException("Type får inte vara tom!");
-        if (baseDamage < 0 || baseDamage > 1000)
-            throw new IllegalArgumentException("Basskadan ska vara mellan 0-1000!");
-        if (accuracy < 0 || accuracy > 100)
-            throw new IllegalArgumentException("Träffsäkerheten ska vara mellan 0-100!");
+        if (baseDamage < 1 || baseDamage > 1000)
+            throw new IllegalArgumentException("Basskadan ska vara mellan 1-1000!");
+        if (accuracy < 1 || accuracy > 100)
+            throw new IllegalArgumentException("Träffsäkerheten ska vara mellan 1-100!");
         this.name = name;
         this.type = type;
         this.baseDamage = baseDamage;

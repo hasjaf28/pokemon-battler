@@ -142,8 +142,8 @@ public class Main {
     public static Attack askForNewAttack(Scanner input) {
         String name = InputHelper.readValidName(input, "Attackens namn: ");
         Type type = askForType(input);
-        int baseDamage = InputHelper.readIntInRange(input, "Basskada (0-1000): ", 0, 1000);
-        int accuracy = InputHelper.readIntInRange(input, "Träffsäkerhet (0-100): ", 0, 100);
+        int baseDamage = InputHelper.readIntInRange(input, "Basskada (1-1000): ", 1, 1000);
+        int accuracy = InputHelper.readIntInRange(input, "Träffsäkerhet (1-100): ", 1, 100);
         return new Attack(name, type, baseDamage, accuracy);
     }
 
