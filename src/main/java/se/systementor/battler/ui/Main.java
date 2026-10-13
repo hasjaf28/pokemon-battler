@@ -4,13 +4,13 @@ package se.systementor.battler.ui;
 import se.systementor.battler.model.Attack;
 import se.systementor.battler.model.Pokemon;
 import se.systementor.battler.model.Type;
+import se.systementor.battler.repository.PokemonRepository;
 
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.nio.file.Path;
 import java.nio.file.Files;
 import java.io.IOException;
-import java.io.BufferedWriter;
 
 public class Main {
 
@@ -48,7 +48,7 @@ public class Main {
                     case 2 -> addPokemon(input, pokedex);
                     case 3 -> editPokemon(input, pokedex);
                     case 4 -> deletePokemon(input, pokedex);
-                    case 5 -> saveToFile(path, pokedex);
+                    case 5 -> PokemonRepository.saveToFile(path, pokedex);
                     case 6 -> pokedex = loadFromFile(path, pokedex);
                     case 7 -> pokedex = resetToSeed(input, pokedex);
                     case 8 -> running = false;
@@ -62,7 +62,7 @@ public class Main {
                 running = false;
             }
         }
-        saveToFile(path, pokedex);
+        PokemonRepository.saveToFile(path, pokedex);
         System.out.println("Pokédex avslutat! Ha det bra!");
     }
 
@@ -241,28 +241,6 @@ public class Main {
             System.out.println("Borttagning av " + pokemon.getName() + " genomfördes!");
         } else {
             System.out.println("Borttagningen avbröts!");
-        }
-    }
-
-    public static void saveToFile(Path path, ArrayList<Pokemon> pokedex) {
-        try (BufferedWriter fileWriter = Files.newBufferedWriter(path)) {
-            for (Pokemon pokemon : pokedex) {
-                String attacksPart = "";
-                for (int i = 0; i < pokemon.getAttacks().size(); i++) {
-                    if (i > 0) {
-                        attacksPart = attacksPart + ";";
-                    }
-                    Attack attack = pokemon.getAttacks().get(i);
-                    attacksPart = attacksPart + attack.getName() + ":" +
-                            attack.getType() + ":" + attack.getBaseDamage() + ":" + attack.getAccuracy();
-                }
-                fileWriter.write(pokemon.getName() + ", " + pokemon.getType() + ", "
-                        + pokemon.getMaxHp() + ", " + pokemon.getCurrentHp() + ", " + attacksPart);
-                fileWriter.newLine();
-            }
-            System.out.println("Pokédexen har sparats till " + path.toAbsolutePath());
-        } catch (IOException e) {
-            System.out.println("Filen kunde inte sparas: " + e.getMessage());
         }
     }
 
