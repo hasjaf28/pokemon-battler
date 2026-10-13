@@ -23,7 +23,7 @@ public class Main {
             pokedex = PokemonRepository.loadFromFile(path, new ArrayList<>());
             System.out.println("Sparad pokémondata hittades och lästes in");
         } else {
-            pokedex = createSeedData();
+            pokedex = PokemonRepository.createSeedData();
             System.out.println("Inget sparad pokémondata hittades därför fyller pokédexen på med startdata!");
         }
 
@@ -77,42 +77,6 @@ public class Main {
         }
     }
 
-    public static ArrayList<Pokemon> createSeedData() {
-        ArrayList<Pokemon> seed = new ArrayList<>();
-
-        Pokemon pikachu = new Pokemon("Pikachu", Type.ELECTRIC, 95);
-        pikachu.getAttacks().add(new Attack("Thunderbolt", Type.ELECTRIC, 120, 100));
-        pikachu.getAttacks().add(new Attack("Ironfist", Type.NORMAL, 140, 88));
-        seed.add(pikachu);
-
-        Pokemon charizard = new Pokemon("Charizard", Type.FIRE, 180);
-        charizard.getAttacks().add(new Attack("Fire Blast", Type.FIRE, 180, 90));
-        charizard.getAttacks().add(new Attack("Iron Claw", Type.NORMAL, 150, 95));
-        seed.add(charizard);
-
-        Pokemon arceus = new Pokemon("Arceus", Type.NORMAL, 360);
-        arceus.getAttacks().add(new Attack("Doomsday", Type.NORMAL, 240, 98));
-        arceus.getAttacks().add(new Attack("Impactish", Type.NORMAL, 170, 80));
-        seed.add(arceus);
-
-        Pokemon gyarados = new Pokemon("Gyarados", Type.WATER, 230);
-        gyarados.getAttacks().add(new Attack("Ronin", Type.WATER, 220, 95));
-        gyarados.getAttacks().add(new Attack("Water splash", Type.WATER, 170, 75));
-        seed.add(gyarados);
-
-        Pokemon snorlax = new Pokemon("Snorlax", Type.GRASS, 380);
-        snorlax.getAttacks().add(new Attack("Snuvan", Type.NORMAL, 190, 80));
-        snorlax.getAttacks().add(new Attack("Normal Impact", Type.NORMAL, 70, 100));
-        seed.add(snorlax);
-
-        Pokemon thanos = new Pokemon("Thanos", Type.FIRE, 450);
-        thanos.getAttacks().add(new Attack("Power Stone", Type.FIRE, 480, 98));
-        thanos.getAttacks().add(new Attack("Soul Catcher", Type.NORMAL, 290, 90));
-        seed.add(thanos);
-
-        return seed;
-
-    }
     public static void addPokemon(Scanner input, ArrayList<Pokemon> pokedex) {
         String name = InputHelper.readValidName(input, "Namn: ");
         Type type = askForType(input);
@@ -248,7 +212,7 @@ public class Main {
                 "Du är på väg att radera all data, vill du återställa Pokédexen till startdata?");
         if (confirm) {
             System.out.println("Pokédexen har återställts till startdata!");
-            return createSeedData();
+            return PokemonRepository.createSeedData();
         } else {
             System.out.println("Återställningen avbröts!");
             return pokedex;
