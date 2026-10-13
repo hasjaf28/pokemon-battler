@@ -7,7 +7,7 @@ public class Pokemon {
     private Type type;
     private int maxHp;
     private int currentHp;
-    private ArrayList<Attack> attacks = new ArrayList<>();
+    private final ArrayList<Attack> attacks = new ArrayList<>();
 
     public Pokemon(String name, Type type, int maxHp) {
         if (name == null || name.isBlank())
@@ -52,5 +52,18 @@ public class Pokemon {
         if (value < 0) value = 0;
         if (value > maxHp) value = maxHp;
         this.currentHp = value;
+    }
+    public void takeDamage(int amount) {
+        if (amount < 0)
+            throw new IllegalArgumentException("Skada får inte vara negativ!");
+        currentHp = Math.max(0, currentHp - amount);
+    }
+    public void heal(int amount) {
+        if (amount < 0)
+            throw new IllegalArgumentException("Läkningen kan inte vara negativ!");
+        currentHp = Math.min(maxHp, currentHp + amount);
+    }
+    public boolean isFainted() {
+        return currentHp == 0;
     }
 }
