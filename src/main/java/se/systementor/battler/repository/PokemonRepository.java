@@ -32,4 +32,54 @@ public class PokemonRepository {
             System.out.println("Filen kunde inte sparas: " + e.getMessage());
         }
     }
+
+    public static ArrayList<Pokemon> loadFromFile(Path path, ArrayList<Pokemon> pokedex) {
+        if (!Files.exists(path)) {
+            System.out.println("Ingen sparad fil kunde hittas!");
+            return pokedex;
+        }
+        ArrayList<Pokemon> result = new ArrayList<>();
+        try {
+            for (String line : Files.readAllLines(path)) {
+                if (line.isBlank()) {
+                    continue;
+                }
+                String[] fields = line.split(", ");
+                if (fields.length != 5) {
+                    System.out.println("Hoppar över den korrupta raden: " + line);
+                    continue;
+                }
+                try {
+                    String name = fields[0];
+                    Type type = Type.valueOf(fields[1]);
+                    int maxHp = Integer.parseInt(fields[2]);
+                    int currentHp = Integer.parseInt(fields[3]);
+                    String attacksPart = fields[4];
+
+                    Pokemon pokemon = new Pokemon(name, type, maxHp);
+                    pokemon.setCurrentHp(currentHp);
+
+                    String[] attackParts = attacksPart.split(";");
+                    for (String attackPart : attackParts) {
+                        String[] attack = attackPart.split(":");
+                        if (attack.length != 4) {
+                            continue;
+                        }
+                        String attackName = attack[0];
+                        Type attackType = Type.valueOf(attack[1]);
+                        int baseDamage = Integer.parseInt(attack[2]);
+                        int accuracy = Integer.parseInt(attack[3]);
+                        pokemon.getAttacks().add(new Attack(attackName, attackType, baseDamage, accuracy));
+                    }
+                    result.add(pokemon);
+                } catch (Exception e) {
+                    System.out.println("Hoppar över den korrupta raden: " + line);
+                }
+            }
+            System.out.println("Pokédexen har laddats från " + path.toAbsolutePath());
+        } catch (IOException e) {
+            System.out.println("Filen kunde inte läsas: " + e.getMessage());
+        }
+        return result;
+    }
 }
