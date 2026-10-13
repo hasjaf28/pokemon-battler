@@ -4,6 +4,7 @@ package se.systementor.battler.ui;
 import se.systementor.battler.model.Attack;
 import se.systementor.battler.model.Pokemon;
 import se.systementor.battler.model.Type;
+import se.systementor.battler.model.DamageAttack;
 import se.systementor.battler.repository.PokemonRepository;
 
 import java.util.Scanner;
@@ -107,7 +108,7 @@ public class Main {
         Type type = askForType(input);
         int baseDamage = InputHelper.readIntInRange(input, "Basskada (1-1000): ", 1, 1000);
         int accuracy = InputHelper.readIntInRange(input, "Träffsäkerhet (1-100): ", 1, 100);
-        return new Attack(name, type, baseDamage, accuracy);
+        return new DamageAttack(name, type, baseDamage, accuracy);
     }
 
     public static void printAttacks(Pokemon pokemon) {

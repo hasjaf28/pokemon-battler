@@ -3,6 +3,7 @@ package se.systementor.battler.repository;
 import se.systementor.battler.model.Pokemon;
 import se.systementor.battler.model.Attack;
 import se.systementor.battler.model.Type;
+import se.systementor.battler.model.DamageAttack;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -69,7 +70,7 @@ public class PokemonRepository {
                         Type attackType = Type.valueOf(attack[1]);
                         int baseDamage = Integer.parseInt(attack[2]);
                         int accuracy = Integer.parseInt(attack[3]);
-                        pokemon.getAttacks().add(new Attack(attackName, attackType, baseDamage, accuracy));
+                        pokemon.getAttacks().add(new DamageAttack(attackName, attackType, baseDamage, accuracy));
                     }
                     result.add(pokemon);
                 } catch (Exception e) {
@@ -87,33 +88,33 @@ public class PokemonRepository {
         ArrayList<Pokemon> seed = new ArrayList<>();
 
         Pokemon pikachu = new Pokemon("Pikachu", Type.ELECTRIC, 95);
-        pikachu.getAttacks().add(new Attack("Thunderbolt", Type.ELECTRIC, 120, 100));
-        pikachu.getAttacks().add(new Attack("Ironfist", Type.NORMAL, 140, 88));
+        pikachu.getAttacks().add(new DamageAttack("Thunderbolt", Type.ELECTRIC, 120, 100));
+        pikachu.getAttacks().add(new DamageAttack("Ironfist", Type.NORMAL, 140, 88));
         seed.add(pikachu);
 
         Pokemon charizard = new Pokemon("Charizard", Type.FIRE, 180);
-        charizard.getAttacks().add(new Attack("Fire Blast", Type.FIRE, 180, 90));
-        charizard.getAttacks().add(new Attack("Iron Claw", Type.NORMAL, 150, 95));
+        charizard.getAttacks().add(new DamageAttack("Fire Blast", Type.FIRE, 180, 90));
+        charizard.getAttacks().add(new DamageAttack("Iron Claw", Type.NORMAL, 150, 95));
         seed.add(charizard);
 
         Pokemon arceus = new Pokemon("Arceus", Type.NORMAL, 360);
-        arceus.getAttacks().add(new Attack("Doomsday", Type.NORMAL, 240, 98));
-        arceus.getAttacks().add(new Attack("Impactish", Type.NORMAL, 170, 80));
+        arceus.getAttacks().add(new DamageAttack("Doomsday", Type.NORMAL, 240, 98));
+        arceus.getAttacks().add(new DamageAttack("Impactish", Type.NORMAL, 170, 80));
         seed.add(arceus);
 
         Pokemon gyarados = new Pokemon("Gyarados", Type.WATER, 230);
-        gyarados.getAttacks().add(new Attack("Ronin", Type.WATER, 220, 95));
-        gyarados.getAttacks().add(new Attack("Water splash", Type.WATER, 170, 75));
+        gyarados.getAttacks().add(new DamageAttack("Ronin", Type.WATER, 220, 95));
+        gyarados.getAttacks().add(new DamageAttack("Water splash", Type.WATER, 170, 75));
         seed.add(gyarados);
 
         Pokemon snorlax = new Pokemon("Snorlax", Type.GRASS, 380);
-        snorlax.getAttacks().add(new Attack("Snuvan", Type.NORMAL, 190, 80));
-        snorlax.getAttacks().add(new Attack("Normal Impact", Type.NORMAL, 70, 100));
+        snorlax.getAttacks().add(new DamageAttack("Snuvan", Type.NORMAL, 190, 80));
+        snorlax.getAttacks().add(new DamageAttack("Normal Impact", Type.NORMAL, 70, 100));
         seed.add(snorlax);
 
         Pokemon thanos = new Pokemon("Thanos", Type.FIRE, 450);
-        thanos.getAttacks().add(new Attack("Power Stone", Type.FIRE, 480, 98));
-        thanos.getAttacks().add(new Attack("Soul Catcher", Type.NORMAL, 290, 90));
+        thanos.getAttacks().add(new DamageAttack("Power Stone", Type.FIRE, 480, 98));
+        thanos.getAttacks().add(new DamageAttack("Soul Catcher", Type.NORMAL, 290, 90));
         seed.add(thanos);
 
         return seed;

@@ -1,6 +1,6 @@
 package se.systementor.battler.model;
 
-public class Attack {
+public abstract class Attack {
     private final String name;
     private final Type type;
     private final int baseDamage;
@@ -32,6 +32,8 @@ public class Attack {
     public int getAccuracy() {
         return accuracy;
     }
+
+    public abstract void execute(Pokemon attacker, Pokemon defender, int amount);
 
 }
 
