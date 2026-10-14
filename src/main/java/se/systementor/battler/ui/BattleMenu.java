@@ -53,5 +53,7 @@ public class BattleMenu {
             System.out.println("Du vann striden! Din " + player.getName() + " vann över motståndarens " +
                     cpu.getName() + "!");
         }
+
+        player.heal(player.getMaxHp());
     }
 }
