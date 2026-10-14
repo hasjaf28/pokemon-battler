@@ -21,6 +21,7 @@ public class Pokemon {
         this.maxHp = maxHp;
         this.currentHp = maxHp;
     }
+
     public String getName() {
         return name;
     }
@@ -48,22 +49,27 @@ public class Pokemon {
             currentHp = maxHp;
         }
     }
+
     public void setCurrentHp( int value) {
         if (value < 0) value = 0;
         if (value > maxHp) value = maxHp;
         this.currentHp = value;
     }
+
     public void takeDamage(int amount) {
         if (amount < 0)
             throw new IllegalArgumentException("Skada får inte vara negativ!");
         currentHp = Math.max(0, currentHp - amount);
     }
+
     public void heal(int amount) {
         if (amount < 0)
             throw new IllegalArgumentException("Läkningen kan inte vara negativ!");
         currentHp = Math.min(maxHp, currentHp + amount);
     }
+
     public boolean isFainted() {
         return currentHp == 0;
     }
+
 }

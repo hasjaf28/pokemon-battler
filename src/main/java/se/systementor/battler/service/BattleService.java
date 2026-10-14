@@ -34,4 +34,37 @@ public class BattleService {
         log.add(attacker.getName() + " har nu " + attacker.getCurrentHp() + "/" + attacker.getMaxHp() + " HP!");
         log.add(defender.getName() + " har nu " + defender.getCurrentHp() + "/" + defender.getMaxHp() + " HP!");
     }
+
+    private Attack selectCpuAttack(Pokemon cpu) {
+        return cpu.getAttacks().get(random.nextInt(cpu.getAttacks().size()));
+    }
+
+    public boolean canFight(Pokemon pokemon) {
+        return !pokemon.getAttacks().isEmpty() && !pokemon.isFainted();
+    }
+
+    public void playTurn(Pokemon player, Pokemon cpu, Attack playerAttack) {
+        performAttack(player, cpu, playerAttack);
+
+        if (cpu.isFainted()) {
+            log.add(cpu.getName() + " har svimmat!");
+            return;
+        }
+
+        Attack cpuAttack = selectCpuAttack(cpu);
+        performAttack(cpu, player, cpuAttack);
+
+        if (player.isFainted()) {
+            log.add(player.getName() + " har svimmat!");
+            return;
+        }
+    }
+
+    public ArrayList<String> getLog() {
+        return log;
+    }
+
+    public void clearLog() {
+        log.clear();
+    }
 }
