@@ -39,10 +39,12 @@ public class Main {
             System.out.println("5. Spara till fil");
             System.out.println("6. Ladda från fil");
             System.out.println("7. Återställ till seedad data");
-            System.out.println("8. Avsluta");
+            System.out.println("8. Starta strid");
+            System.out.println("9. Stridsresultat");
+            System.out.println("10. Avsluta");
 
             try {
-                int choice = InputHelper.readIntInRange(input, "Välj: ", 1, 8);
+                int choice = InputHelper.readIntInRange(input, "Välj: ", 1, 10);
                 switch (choice) {
                     case 1 -> showAllPokemons(pokedex);
                     case 2 -> addPokemon(input, pokedex);
@@ -51,7 +53,8 @@ public class Main {
                     case 5 -> PokemonRepository.saveToFile(path, pokedex);
                     case 6 -> pokedex = PokemonRepository.loadFromFile(path, pokedex);
                     case 7 -> pokedex = resetToSeed(input, pokedex);
-                    case 8 -> running = false;
+                    case 8 -> BattleMenu.startBattle(input, pokedex);
+                    case 10 -> running = false;
                 }
             } catch (Exception e) {
                 String message = e.getMessage();
