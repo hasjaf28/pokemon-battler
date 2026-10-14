@@ -87,34 +87,34 @@ public class PokemonRepository {
     public static ArrayList<Pokemon> createSeedData() {
         ArrayList<Pokemon> seed = new ArrayList<>();
 
-        Pokemon pikachu = new Pokemon("Pikachu", Type.ELECTRIC, 95);
-        pikachu.getAttacks().add(new DamageAttack("Thunderbolt", Type.ELECTRIC, 120, 100));
-        pikachu.getAttacks().add(new DamageAttack("Ironfist", Type.NORMAL, 140, 88));
+        Pokemon pikachu = new Pokemon("Pikachu", Type.ELECTRIC, 200);
+        pikachu.getAttacks().add(new DamageAttack("Thunderbolt", Type.ELECTRIC, 90, 100));
+        pikachu.getAttacks().add(new DamageAttack("Ironfist", Type.NORMAL, 70, 90));
         seed.add(pikachu);
 
-        Pokemon charizard = new Pokemon("Charizard", Type.FIRE, 180);
-        charizard.getAttacks().add(new DamageAttack("Fire Blast", Type.FIRE, 180, 90));
-        charizard.getAttacks().add(new DamageAttack("Iron Claw", Type.NORMAL, 150, 95));
+        Pokemon charizard = new Pokemon("Charizard", Type.FIRE, 250);
+        charizard.getAttacks().add(new DamageAttack("Fire Blast", Type.FIRE, 95, 85));
+        charizard.getAttacks().add(new DamageAttack("Iron Claw", Type.NORMAL, 80, 95));
         seed.add(charizard);
 
-        Pokemon arceus = new Pokemon("Arceus", Type.NORMAL, 360);
-        arceus.getAttacks().add(new DamageAttack("Doomsday", Type.NORMAL, 240, 98));
-        arceus.getAttacks().add(new DamageAttack("Impactish", Type.NORMAL, 170, 80));
+        Pokemon arceus = new Pokemon("Arceus", Type.NORMAL, 310);
+        arceus.getAttacks().add(new DamageAttack("Doomsday", Type.NORMAL, 95, 90));
+        arceus.getAttacks().add(new DamageAttack("Impactish", Type.NORMAL, 85, 80));
         seed.add(arceus);
 
-        Pokemon gyarados = new Pokemon("Gyarados", Type.WATER, 230);
-        gyarados.getAttacks().add(new DamageAttack("Ronin", Type.WATER, 220, 95));
-        gyarados.getAttacks().add(new DamageAttack("Water splash", Type.WATER, 170, 75));
+        Pokemon gyarados = new Pokemon("Gyarados", Type.WATER, 270);
+        gyarados.getAttacks().add(new DamageAttack("Ronin", Type.WATER, 90, 90));
+        gyarados.getAttacks().add(new DamageAttack("Water splash", Type.WATER, 70, 75));
         seed.add(gyarados);
 
-        Pokemon snorlax = new Pokemon("Snorlax", Type.GRASS, 380);
-        snorlax.getAttacks().add(new DamageAttack("Snuvan", Type.NORMAL, 190, 80));
+        Pokemon snorlax = new Pokemon("Snorlax", Type.GRASS, 390);
+        snorlax.getAttacks().add(new DamageAttack("Snuvan", Type.NORMAL, 85, 75));
         snorlax.getAttacks().add(new DamageAttack("Normal Impact", Type.NORMAL, 70, 100));
         seed.add(snorlax);
 
         Pokemon thanos = new Pokemon("Thanos", Type.FIRE, 450);
-        thanos.getAttacks().add(new DamageAttack("Power Stone", Type.FIRE, 480, 98));
-        thanos.getAttacks().add(new DamageAttack("Soul Catcher", Type.NORMAL, 290, 90));
+        thanos.getAttacks().add(new DamageAttack("Power Stone", Type.FIRE, 100, 98));
+        thanos.getAttacks().add(new DamageAttack("Soul Catcher", Type.NORMAL, 90, 90));
         seed.add(thanos);
 
         return seed;

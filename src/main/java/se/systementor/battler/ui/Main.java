@@ -10,6 +10,7 @@ import se.systementor.battler.repository.PokemonRepository;
 import se.systementor.battler.repository.StatsRepository;
 
 
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.nio.file.Path;
@@ -70,6 +71,9 @@ public class Main {
                     }
                     case 10 -> running = false;
                 }
+            } catch (NoSuchElementException e) {
+                System.out.println("Inmatningen avbröts! Programmet avslutas!");
+                running = false;
             } catch (Exception e) {
                 String message = e.getMessage();
                 if (message == null) {
