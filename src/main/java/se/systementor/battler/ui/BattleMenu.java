@@ -2,6 +2,7 @@ package se.systementor.battler.ui;
 
 import se.systementor.battler.model.Pokemon;
 import se.systementor.battler.model.Attack;
+import se.systementor.battler.model.BattleStats;
 import se.systementor.battler.service.BattleService;
 import se.systementor.battler.repository.PokemonRepository;
 
@@ -10,9 +11,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-
 public class BattleMenu {
-    public static void startBattle(Scanner input, ArrayList<Pokemon> pokedex) {
+    public static void startBattle(Scanner input, ArrayList<Pokemon> pokedex, BattleStats stats) {
         if (pokedex.isEmpty()) {
             System.out.println("Pokédexen är tom! Du behöver ha minst en Pokémon för att strida!");
             return;
@@ -49,9 +49,11 @@ public class BattleMenu {
         if (player.isFainted()) {
             System.out.println("Du förlorade striden! Motståndarens " + cpu.getName() +
                     " vann över din " + player.getName() + "!");
+            stats.addLoss();
         } else {
             System.out.println("Du vann striden! Din " + player.getName() + " vann över motståndarens " +
                     cpu.getName() + "!");
+            stats.addWin();
         }
 
         player.heal(player.getMaxHp());

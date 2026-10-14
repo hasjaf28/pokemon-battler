@@ -5,7 +5,10 @@ import se.systementor.battler.model.Attack;
 import se.systementor.battler.model.Pokemon;
 import se.systementor.battler.model.Type;
 import se.systementor.battler.model.DamageAttack;
+import se.systementor.battler.model.BattleStats;
 import se.systementor.battler.repository.PokemonRepository;
+import se.systementor.battler.repository.StatsRepository;
+
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -27,6 +30,9 @@ public class Main {
             pokedex = PokemonRepository.createSeedData();
             System.out.println("Inget sparad pokémondata hittades därför fyller pokédexen på med startdata!");
         }
+
+        Path statsPath = Path.of("stats.txt");
+        BattleStats stats = StatsRepository.loadStats(statsPath);
 
         boolean running = true;
         while (running) {
@@ -53,7 +59,15 @@ public class Main {
                     case 5 -> PokemonRepository.saveToFile(path, pokedex);
                     case 6 -> pokedex = PokemonRepository.loadFromFile(path, pokedex);
                     case 7 -> pokedex = resetToSeed(input, pokedex);
-                    case 8 -> BattleMenu.startBattle(input, pokedex);
+                    case 8 -> {
+                        BattleMenu.startBattle(input, pokedex, stats);
+                        StatsRepository.saveStats(statsPath, stats);
+                    }
+                    case 9 -> {
+                        System.out.println("===== Stridsresultat =====");
+                        System.out.println("Vinster: " + stats.getWins());
+                        System.out.println("Förluster: " + stats.getLosses());
+                    }
                     case 10 -> running = false;
                 }
             } catch (Exception e) {
