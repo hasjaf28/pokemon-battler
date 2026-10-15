@@ -39,9 +39,9 @@ public class Main {
         boolean running = true;
         while (running) {
             System.out.println();
-            System.out.println("=== Välkommen till POKÉDEX ===");
+            System.out.println("=== Välkommen till POKÉMON BATTLER ===");
             System.out.println("1. Visa alla Pokémoner");
-            System.out.println("2. Lägg till ny Pokémon");
+            System.out.println("2. Lägga till ny Pokémon");
             System.out.println("3. Redigera Pokémon");
             System.out.println("4. Ta bort Pokémon");
             System.out.println("5. Spara till fil");
@@ -78,14 +78,14 @@ public class Main {
             } catch (Exception e) {
                 String message = e.getMessage();
                 if (message == null) {
-                    message = "Oväntat fel inträffades! Avslutar Pokédexen!";
+                    message = "Oväntat fel inträffades! Avslutar Pokémon Battler!";
                 }
                 System.out.println(message);
                 running = false;
             }
         }
         PokemonRepository.saveToFile(path, pokedex);
-        System.out.println("Pokédex avslutat! Ha det bra!");
+        System.out.println("Pokémon Battler avslutat! Ha det bra!");
     }
 
     public static void showAllPokemons(ArrayList<Pokemon> pokedex) {
