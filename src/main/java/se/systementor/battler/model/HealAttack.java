@@ -10,4 +10,9 @@ public class HealAttack extends Attack {
     public void execute(Pokemon attacker, Pokemon defender, int amount) {
         attacker.heal(amount);
     }
+
+    @Override
+    public String getAttackKind() {
+        return "Heal";
+    }
 }

@@ -10,4 +10,9 @@ public class DamageAttack extends Attack {
     public void execute(Pokemon attacker, Pokemon defender, int amount) {
         defender.takeDamage(amount);
     }
+
+    @Override
+    public String getAttackKind() {
+        return "Damage";
+    }
 }

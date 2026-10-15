@@ -4,6 +4,7 @@ import se.systementor.battler.model.Pokemon;
 import se.systementor.battler.model.Attack;
 import se.systementor.battler.model.Type;
 import se.systementor.battler.model.DamageAttack;
+import se.systementor.battler.model.HealAttack;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -22,7 +23,8 @@ public class PokemonRepository {
                     }
                     Attack attack = pokemon.getAttacks().get(i);
                     attacksPart = attacksPart + attack.getName() + ":" +
-                            attack.getType() + ":" + attack.getBaseDamage() + ":" + attack.getAccuracy();
+                            attack.getType() + ":" + attack.getBaseDamage() + ":" + attack.getAccuracy() +
+                            ":" + attack.getAttackKind();
                 }
                 fileWriter.write(pokemon.getName() + ", " + pokemon.getType() + ", "
                         + pokemon.getMaxHp() + ", " + pokemon.getCurrentHp() + ", " + attacksPart);
@@ -63,18 +65,28 @@ public class PokemonRepository {
                     String[] attackParts = attacksPart.split(";");
                     for (String attackPart : attackParts) {
                         String[] attack = attackPart.split(":");
-                        if (attack.length != 4) {
-                            continue;
+                        if (attack.length != 5) {
+                            throw new IllegalArgumentException("Attacken är korrupt: " + attackPart);
                         }
                         String attackName = attack[0];
                         Type attackType = Type.valueOf(attack[1]);
                         int baseDamage = Integer.parseInt(attack[2]);
                         int accuracy = Integer.parseInt(attack[3]);
-                        pokemon.getAttacks().add(new DamageAttack(attackName, attackType, baseDamage, accuracy));
+                        String attackKind = attack[4];
+
+                        Attack newAttack;
+                        if (attackKind.equals("Damage")) {
+                            newAttack = new DamageAttack(attackName, attackType, baseDamage, accuracy);
+                        } else if (attackKind.equals("Heal")) {
+                            newAttack = new HealAttack(attackName, attackType, baseDamage, accuracy);
+                        } else {
+                            throw new IllegalArgumentException("Attacken är okänd: " + attackKind);
+                        }
+                        pokemon.getAttacks().add(newAttack);
                     }
                     result.add(pokemon);
                 } catch (Exception e) {
-                    System.out.println("Hoppar över den korrupta raden: " + line);
+                    System.out.println("Hoppar över den korrupta raden: " + line + " (" + e.getMessage() + ")");
                 }
             }
             System.out.println("Pokédexen har laddats från " + path.toAbsolutePath());

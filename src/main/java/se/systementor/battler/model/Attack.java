@@ -35,5 +35,7 @@ public abstract class Attack {
 
     public abstract void execute(Pokemon attacker, Pokemon defender, int amount);
 
+    public abstract String getAttackKind();
+
 }
 

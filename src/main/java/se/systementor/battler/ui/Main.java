@@ -6,6 +6,7 @@ import se.systementor.battler.model.Pokemon;
 import se.systementor.battler.model.Type;
 import se.systementor.battler.model.DamageAttack;
 import se.systementor.battler.model.BattleStats;
+import se.systementor.battler.model.HealAttack;
 import se.systementor.battler.repository.PokemonRepository;
 import se.systementor.battler.repository.StatsRepository;
 
@@ -127,9 +128,18 @@ public class Main {
     public static Attack askForNewAttack(Scanner input) {
         String name = InputHelper.readValidName(input, "Attackens namn: ");
         Type type = askForType(input);
-        int baseDamage = InputHelper.readIntInRange(input, "Basskada (1-1000): ", 1, 1000);
+        int baseDamage = InputHelper.readIntInRange(input, "Basskada/läkning (1-1000): ", 1, 1000);
         int accuracy = InputHelper.readIntInRange(input, "Träffsäkerhet (1-100): ", 1, 100);
-        return new DamageAttack(name, type, baseDamage, accuracy);
+
+        System.out.println("1. Skada");
+        System.out.println("2. Läkning");
+        int attackType = InputHelper.readIntInRange(input, "Välj en attacktyp: ", 1, 2);
+
+        if (attackType == 1) {
+            return new DamageAttack(name, type, baseDamage, accuracy);
+        } else {
+            return new HealAttack(name, type, baseDamage, accuracy);
+        }
     }
 
     public static void printAttacks(Pokemon pokemon) {
