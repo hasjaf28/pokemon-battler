@@ -265,5 +265,14 @@ public class Main {
         } else {
             System.out.println("Mest använda Pokémon: " + pokemon);
         }
+        System.out.println();
+        if (stats.playedPokemon().isEmpty()) {
+            System.out.println("Ratio per Pokémon: Ingen data finns än!");
+        } else {
+            System.out.println("Ratio per Pokémon: ");
+            for (String name : stats.playedPokemon()) {
+                System.out.printf("%s: %.0f%%%n", name, stats.winRatio(name) * 100);
+            }
+        }
     }
 }
