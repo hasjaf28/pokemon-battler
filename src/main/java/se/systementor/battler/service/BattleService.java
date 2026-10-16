@@ -15,9 +15,10 @@ public class BattleService {
         return random.nextInt(100) < attack.getAccuracy();
     }
 
-    private int calculateDamage(Attack attack) {
+    private int calculateDamage(Attack attack, double multiplier) {
         int factor = random.nextInt(16) + 85;
         int damage = attack.getBaseDamage() * factor / 100;
+        damage = (int) (damage * multiplier);
         return Math.max(1, damage);
     }
 
@@ -29,8 +30,14 @@ public class BattleService {
             return;
         }
 
-        int amount = calculateDamage(attack);
+        double multiplier = attack.getMultiplier(defender.getType());
+        int amount = calculateDamage(attack, multiplier);
         attack.execute(attacker, defender, amount);
+        if (multiplier > 1.0) {
+            log.add("Attacken var supereffektiv!");
+        } else if (multiplier < 1.0) {
+            log.add("Attacken var inte särskilt effektiv!");
+        }
         log.add(attacker.getName() + " har nu " + attacker.getCurrentHp() + "/" + attacker.getMaxHp() + " HP!");
         log.add(defender.getName() + " har nu " + defender.getCurrentHp() + "/" + defender.getMaxHp() + " HP!");
     }

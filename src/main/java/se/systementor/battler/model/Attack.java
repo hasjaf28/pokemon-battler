@@ -37,5 +37,9 @@ public abstract class Attack {
 
     public abstract String getAttackKind();
 
+    public double getMultiplier(Type defenderType) {
+        return 1.0;
+    }
+
 }
 

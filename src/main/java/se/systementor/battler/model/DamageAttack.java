@@ -15,4 +15,9 @@ public class DamageAttack extends Attack {
     public String getAttackKind() {
         return "Damage";
     }
+
+    @Override
+    public double getMultiplier(Type defenderType) {
+        return getType().damageMultiplier(defenderType);
+    }
 }
