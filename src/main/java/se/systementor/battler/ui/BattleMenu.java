@@ -39,6 +39,7 @@ public class BattleMenu {
                     player.getAttacks().size() + "): ", 1, player.getAttacks().size()) -1;
 
             Attack playerAttack = player.getAttacks().get(attackIndex);
+            stats.addAttackUsage(playerAttack.getName());
             service.playTurn(player, cpu, playerAttack);
 
             for (String logLine : service.getLog()) {
@@ -49,11 +50,11 @@ public class BattleMenu {
         if (player.isFainted()) {
             System.out.println("Du förlorade striden! Motståndarens " + cpu.getName() +
                     " vann över din " + player.getName() + "!");
-            stats.addLoss();
+            stats.addLoss(player.getName());
         } else {
             System.out.println("Du vann striden! Din " + player.getName() + " vann över motståndarens " +
                     cpu.getName() + "!");
-            stats.addWin();
+            stats.addWin(player.getName());
         }
 
         player.heal(player.getMaxHp());
