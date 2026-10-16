@@ -38,12 +38,18 @@ public class Pokemon {
         return attacks;
     }
     public void setName(String name) {
+        if (name == null || name.isBlank())
+            throw new IllegalArgumentException("Namnet får inte vara tomt!");
         this.name = name;
     }
     public void setType(Type type) {
+        if (type == null)
+            throw new IllegalArgumentException("Type får inte vara tom!");
         this.type = type;
     }
     public void setMaxHp(int maxHp) {
+        if (maxHp < 1 || maxHp > 1000)
+            throw new IllegalArgumentException("Max HP ska vara mellan 1-1000!");
         this.maxHp = maxHp;
         if (currentHp > maxHp) {
             currentHp = maxHp;
