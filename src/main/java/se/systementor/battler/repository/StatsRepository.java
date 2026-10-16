@@ -5,12 +5,14 @@ import se.systementor.battler.model.BattleStats;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.io.IOException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class StatsRepository {
 
     public static void saveStats(Path path, BattleStats stats) {
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            Files.writeString(path, stats.getWins() + "," + stats.getLosses());
+            mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), stats);
         } catch (IOException e) {
             System.out.println("Kunde inte spara statistiken: " + e.getMessage());
         }
@@ -20,13 +22,10 @@ public class StatsRepository {
         if (!Files.exists(path)) {
             return new BattleStats(0, 0);
         }
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            String data = Files.readString(path);
-            String[] fields = data.trim().split(",");
-            int wins = Integer.parseInt(fields[0]);
-            int losses = Integer.parseInt(fields[1]);
-            return new BattleStats(wins, losses);
-        }catch (IOException | ArrayIndexOutOfBoundsException | IllegalArgumentException e) {
+            return mapper.readValue(path.toFile(), BattleStats.class);
+        }catch (IOException e) {
             System.out.println("Kunde inte läsa statistiken: " + e.getMessage());
             return new BattleStats(0, 0);
         }

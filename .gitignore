@@ -40,4 +40,4 @@ build/
 
 .idea/
 pokemon.txt
-stats.txt
+stats.json

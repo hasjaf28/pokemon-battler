@@ -7,9 +7,12 @@ import java.util.Set;
 public class BattleStats {
     private int wins;
     private int losses;
-    private final HashMap<String, Integer> winsPerPokemon = new HashMap<>();
-    private final HashMap<String, Integer> lossesPerPokemon = new HashMap<>();
-    private final HashMap<String, Integer> attackUsage = new HashMap<>();
+    private HashMap<String, Integer> winsPerPokemon = new HashMap<>();
+    private HashMap<String, Integer> lossesPerPokemon = new HashMap<>();
+    private HashMap<String, Integer> attackUsage = new HashMap<>();
+
+    public BattleStats() {
+    }
 
     public BattleStats(int wins, int losses) {
         if (wins < 0 || losses < 0)
@@ -24,6 +27,42 @@ public class BattleStats {
 
     public int getLosses() {
         return losses;
+    }
+
+    public void setWins(int wins) {
+        if (wins < 0)
+            throw new IllegalArgumentException("Vinster får inte vara negativa!");
+        this.wins = wins;
+    }
+
+    public void setLosses(int losses) {
+        if (losses < 0)
+            throw new IllegalArgumentException("Förluster får inte vara negativa!");
+        this.losses = losses;
+    }
+
+    public HashMap<String, Integer> getWinsPerPokemon() {
+        return winsPerPokemon;
+    }
+
+    public void setWinsPerPokemon(HashMap<String, Integer> winsPerPokemon) {
+        this.winsPerPokemon = winsPerPokemon;
+    }
+
+    public HashMap<String, Integer> getLossesPerPokemon() {
+        return lossesPerPokemon;
+    }
+
+    public void setLossesPerPokemon(HashMap<String, Integer> lossesPerPokemon) {
+        this.lossesPerPokemon = lossesPerPokemon;
+    }
+
+    public HashMap<String, Integer> getAttackUsage() {
+        return attackUsage;
+    }
+
+    public void setAttackUsage(HashMap<String, Integer> attackUsage) {
+        this.attackUsage = attackUsage;
     }
 
     public void addWin(String pokemonName) {

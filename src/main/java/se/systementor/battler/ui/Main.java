@@ -33,7 +33,7 @@ public class Main {
             System.out.println("Inget sparad pokémondata hittades därför fyller pokédexen på med startdata!");
         }
 
-        Path statsPath = Path.of("stats.txt");
+        Path statsPath = Path.of("stats.json");
         BattleStats stats = StatsRepository.loadStats(statsPath);
 
         boolean running = true;
