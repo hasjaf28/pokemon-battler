@@ -41,5 +41,10 @@ public abstract class Attack {
         return 1.0;
     }
 
+    // värdet om träffen blir kritisk
+    public double getCritMultiplier() {
+        return 1.0;
+    }
+
 }
 

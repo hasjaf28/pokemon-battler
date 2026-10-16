@@ -20,4 +20,9 @@ public class DamageAttack extends Attack {
     public double getMultiplier(Type defenderType) {
         return getType().damageMultiplier(defenderType);
     }
+
+    @Override
+    public double getCritMultiplier() {
+        return 2.0;
+    }
 }

@@ -15,10 +15,10 @@ public class BattleService {
         return random.nextInt(100) < attack.getAccuracy();
     }
 
-    private int calculateDamage(Attack attack, double multiplier) {
+    private int calculateDamage(Attack attack, double multiplier, double critMultiplier) {
         int factor = random.nextInt(16) + 85;
         int damage = attack.getBaseDamage() * factor / 100;
-        damage = (int) (damage * multiplier);
+        damage = (int) (damage * multiplier * critMultiplier);
         return Math.max(1, damage);
     }
 
@@ -31,8 +31,15 @@ public class BattleService {
         }
 
         double multiplier = attack.getMultiplier(defender.getType());
-        int amount = calculateDamage(attack, multiplier);
+        double critMultiplier = 1.0;
+        if (random.nextInt(16) == 0) {
+            critMultiplier = attack.getCritMultiplier();
+        }
+        int amount = calculateDamage(attack, multiplier, critMultiplier);
         attack.execute(attacker, defender, amount);
+        if (critMultiplier > 1.0) {
+            log.add("Attacken var kritisk!");
+        }
         if (multiplier > 1.0) {
             log.add("Attacken var supereffektiv!");
         } else if (multiplier < 1.0) {
