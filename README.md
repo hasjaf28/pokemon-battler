@@ -10,11 +10,11 @@ i en strid där spelaren och motståndaren turas om.
 - Lägga till en ny Pokémon.
 - Redigera en Pokémon: namn, type, maxHp, attacker.
 - Ta bort en Pokémon.
-- Spara hela listan med Pokémoner till en textfil.
+- Spara hela listan med Pokémoner till en JSON-fil.
 - Ladda tillbaka Pokémonslista från den sparade filen.
 - Återställa till startdata (6 Pokémon som finns från start).
 - Starta en strid mot en slumpmässig motståndarpokémon.
-- Visa stridsresultat (vinster och förluster).
+- Visa stridsresultat (vinster, förluster, ratio per Pokémon, mest använda attack och mest använda Pokémon).
 - Avsluta programmet.
 
 ## Hur man kör programmet
@@ -49,47 +49,54 @@ Välj: 1
 ...
 Välj: 8
 Vilken Pokémon vill du använda för striden? (1-6): 6
-Striden börjar! Din Thanos möter motståndarens Gyarados!
+Striden börjar! Din Thanos möter motståndarens Snorlax!
 1. Power Stone
 2. Soul Catcher
-Välj Attack (1-2): 2
-Thanos använder Soul Catcher!
+Välj Attack (1-2): 1
+Thanos använder Power Stone!
+Attacken var supereffektiv!
 Thanos har nu 450/450 HP!
-Gyarados har nu 194/270 HP!
-Gyarados använder Water splash!
-Gyarados har nu 194/270 HP!
-Thanos har nu 391/450 HP!
+Snorlax har nu 220/390 HP!
+Snorlax använder Normal Impact!
+Snorlax har nu 220/390 HP!
+Thanos har nu 383/450 HP!
 1. Power Stone
 2. Soul Catcher
 Välj Attack (1-2): 1
 Thanos använder Power Stone!
-Thanos har nu 391/450 HP!
-Gyarados har nu 94/270 HP!
-Gyarados använder Water splash!
-Gyarados har nu 94/270 HP!
-Thanos har nu 327/450 HP!
-1. Power Stone
-2. Soul Catcher
-Välj Attack (1-2): 1
-Thanos använder Power Stone!
-Thanos har nu 327/450 HP!
-Gyarados har nu 7/270 HP!
-Gyarados använder Ronin!
-Gyarados har nu 7/270 HP!
-Thanos har nu 239/450 HP!
+Attacken var supereffektiv!
+Thanos har nu 383/450 HP!
+Snorlax har nu 24/390 HP!
+Snorlax använder Snuvan!
+Attacken missade!
 1. Power Stone
 2. Soul Catcher
 Välj Attack (1-2): 2
 Thanos använder Soul Catcher!
-Thanos har nu 239/450 HP!
-Gyarados har nu 0/270 HP!
-Gyarados har svimmat!
-Du vann striden! Din Thanos vann över motståndarens Gyarados!
+Attacken missade!
+Snorlax använder Snuvan!
+Snorlax har nu 24/390 HP!
+Thanos har nu 305/450 HP!
+1. Power Stone
+2. Soul Catcher
+Välj Attack (1-2): 2
+Thanos använder Soul Catcher!
+Thanos har nu 305/450 HP!
+Snorlax har nu 0/390 HP!
+Snorlax har svimmat!
+Du vann striden! Din Thanos vann över motståndarens Snorlax!
 ...
 Välj: 9
 ===== Stridsresultat =====
-Vinster: 5
+Vinster: 1
 Förluster: 0
+Mest använda attack: Power Stone
+Mest använda Pokémon: Thanos
+
+Ratio per Pokémon:
+Thanos: 100%
+...
+Utskriften är förkortad med `...` där menyn upprepas mellan menyval. 
 ```
 
 ## Projektstruktur 
@@ -102,15 +109,17 @@ model/
 - DamageAttack.java         (attack som gör skada)
 - HealAttack.java           (attack som läker Pokémon)
 - Pokemon.java              (datamodellen för Pokémon)
-- Type.java                 (enum med Pokémontyper)
-- BattleStats.java          (vinster och förluster)
+- Type.java                 (enum med Pokémontyper och typeffektivitet)
+- BattleStats.java          (statistik: vinster, förluster, attacker och Pokémon)
 
 repository/ 
-- PokemonRepository.java    (spara och ladda Pokédexen)
-- StatsRepository.java      (spara och ladda statistik)
+- PokemonRepository.java    (sparar och laddar Pokédexen som JSON)
+- StatsRepository.java      (sparar och laddar statistik som JSON)
+- AttackData.java           (hjälpklass för JSON, en attack)
+- PokemonData.java          (hjälpklass för JSON, en Pokémon)
 
 service/ 
-- BattleService.java        (Stridslogik: träff, skada, logg och turer)
+- BattleService.java        (Stridslogik: träff, skada, crit, logg och turer)
 
 ui/ 
 - Main.java                 (huvudmenyn)
@@ -124,15 +133,31 @@ Jag gjorde Attack abstrakt eftersom man aldrig skapar en "vanlig" attack utan al
 sort. Både DamageAttack och HealAttack ärver från Attack med `extends`. Attack har en abstrakt metod 
 `execute(Pokemon attacker, Pokemon defender, int amount)` som subklasserna måste skriva själva. 
 DamageAttack gör skada på motståndaren och HealAttack läker den som attackerar, samma metodanrop men 
-olika saker händer. BattleService anropar bara `attack.execute(...)` och vet inte vilken typ av attack 
-det är. Utan arv hade alla attacktyper behövt ligga i samma klass med if-satser och den hade blivit 
-större för varje ny attacktyp. 
+olika saker händer. BattleService anropar `attack.execute(...)` och vet inte vilken typ av attack det är. 
+Utan arv hade alla attacktyper behövt ligga i samma klass med if-satser och den hade blivit större för 
+varje ny attacktyp. 
 
 Jag har delat upp koden i fyra paket: model, repository, service och ui. Varje paket har ett eget ansvar, 
 model håller dataklasserna, repository sparar och laddar filer, service har stridslogiken och ui hanterar 
 menyer och inläsningen. Detta gör koden lättare att hitta i och att ändra eftersom varje del gör en sak. 
 Main innehåller t.ex. ingen stridslogik. BattleService har reglerna för en enskild tur (träffsäkerhet, skada och logg), 
 medan BattleMenu styr flödet och registrerar vinst eller förlust. 
+
+För JSON-persistensen finns två hjälpklasser i paketet repository, `AttackData` och `PokemonData` eftersom 
+`Attack` är abstrakt och Jackson kan inte skapa en abstrakt klass från JSON. Repositoryklassen översätter mellan 
+de riktiga klasserna och dessa enkla dataobjekt både vid sparning och inläsning. Fälten är public istället för 
+private med getters och setters. Det fungerar här eftersom klasserna bara flyttar data mellan Java och JSON. 
+Det finns inget att skydda. Modellklasserna gör tvärtom. `Pokemon` och `BattleStats` har private fält och 
+setters som validerar eftersom där finns regler som måste hållas. `Pokemon` begränsar HP så det aldrig går under 
+0 eller över maxHp och `BattleStats` avvisar negativa vinster och förluster. Med publicfält hade ogiltiga 
+värden kunnat hamna rakt in. Skillnaden är om klassen har regler att skydda eller bara flyttar data. 
+
+Typeffektivitet och kritiska träffar fungerar på samma sätt. `Attack` har två vanliga metoder `getMultiplier(...)` 
+och `getCritMultiplier()` som båda returnerar 1.0 i basklassen. `DamageAttack` skriver över båda, ena slår upp attackens 
+typ mot försvararens typ och den andra returnerar 2.0 vid en kritisk träff. `HealAttack` rörs inte av dem och ärver 
+1.0 och påverkas därför varken av typeffektivitet eller crit. `BattleService` anropar metoderna på `Attack` utan 
+att veta vilken sort det är och slipper på så sätt specialfall för läkning. 
+
 
 ## Stridssystem 
 
@@ -142,12 +167,17 @@ och om attacken träffar minskar HP för den som blev attackerad. Striden forts�
 
 ### Skadeformel 
 
-skada = basskada * slumpfaktor / 100
+skada = basskada * slumpfaktor / 100 * typmultiplikator * critmultiplikator
 
-Slumpfaktorn är ett tal mellan 85 och 100 och slumpas fram med hjälp av `random.nextInt(16) + 85`. Sen tar jag 
-`Math.max(1, damage)` så att skadan alltid blir minst 1. 
+Slumpfaktorn är ett tal mellan 85 och 100 och slumpas fram med hjälp av `random.nextInt(16) + 85`. Typmultiplikatorn 
+kommer från attackens typ mot försvararens typ. Typmultiplikatorn blir 2.0 när attacken är supereffektiv, 0.5 när den 
+inte är särskilt effektiv och 1.0 i normala fall. Critmultiplikatorn är oftast 1.0 men blir 2.0 vid kritiska träffar 
+vilket händer 1 gång av 16. Efter det gör programmet om talet till int och golvar på 1 med `Math.max`. 
 
-Exempel: basskada 90 och slumpfaktor 90 ger 90 * 90 / 100 = 81 i skada. 
+Exempel utan typeffektivitet eller crit: basskada 90 och slumpfaktor 90 ger 90 * 90 / 100 = 81 i skada. 
+
+Exempel med typeffektivitet och crit: basskada 90 och slumpfaktor 90 ger 90 * 90 / 100 = 81 i skada vilket med 
+typeffektivitet (2x) blir 162. Om det dessutom blir crit (2.0) blir skadan 324.  
 
 ### Turordning 
 
@@ -165,7 +195,7 @@ stryk en Pokémon tål och inte vem som är snabbast.
 
 - Om en Pokémon bara har läkande attacker kan striden pågå för evigt eftersom den läker bort varje attack som 
 motståndaren gör. 
-- Om en rad i pokemon.txt är trasig hoppas den raden över när filen laddas och raden försvinner helt nästa gång 
+- Om en rad i pokemon.json är trasig hoppas den raden över när filen laddas och raden försvinner helt nästa gång 
 man sparar till fil. 
 - Om man avbryter en strid med Ctrl+D sparas den skadade HP:n eftersom återställning till maxHP bara sker efter 
 avslutad strid. 
@@ -175,26 +205,33 @@ BattleService (service). Själva stridsloopen ligger med rätta i BattleMenu (ui
 från spelaren. 
 - HealAttack (model) använder samma fält (baseDamage) för läkning som DamageAttack använder för skada vilket kan 
 vara lite förvirrande. 
+- Om pokemon.json är trasig eller inte går att läsa startar programmet med tom Pokédex och filen skrivs över 
+när man avslutar. 
+- Statistiken hänger ihop med Pokémonens namn. Byter man namn ligger den gamla statistiken kvar, och två 
+Pokémon med samma namn delar statistik. 
 
 ## VG-krav
 
-Inga VG-krav är implementerade i den här versionen. Följande VG-krav är planerade att implementeras: 
+Alla fyra VG-krav är implementerade: 
 
-- Typeffektivitetstabell (Fire->Grass 2x, Water->Fire 2x, Grass->Water 2x, Electric->Water 2x, Fire->Water 0.5x, 
- Water->Grass 0.5x, Grass->Fire 0.5x, Normal 1x). 
-- Kritiska träffar (1/16 chans som dubblar skadan och syns i loggen). 
-- JSON-persistens via Jackson. 
-- Persistent statistik per Pokémon och mest använda attack. 
-
-Det som redan finns är totala vinster och förluster som sparas mellan körningar och visas via menyval 9 
-(Stridsresultat).
+- **Typeffektivitet:** Tabellen ligger i `Type.damageMultiplier(...)` och `DamageAttack` använder den via 
+`getMultiplier(...)` medan `HealAttack` ärver 1.0 så att läkningen inte påverkas. Loggen visar "supereffektiv" vid 
+2.0 och "inte särskilt effektiv" vid 0.5. Vid 1.0 skrivs inget. 
+- **Kritiska träffar:** `BattleService` har 1 av 16 chans att dubbla skadan. När det händer visas "Attacken var 
+kritisk!" i loggen.
+- **JSON-persistens:** Allt sparas som JSON med Jackson. `PokemonRepository` sköter `pokemon.json` och 
+`StatsRepository` sköter `stats.json`. `AttackData` och `PokemonData` finns som mellanhänder vid sparning och 
+inläsning eftersom `Attack` är abstrakt. 
+- **Persistent statistik:** `BattleStats` sparar totala vinster och förluster, vinster och förluster per Pokémon 
+och användning per attack. Statistiken finns kvar mellan körningar och visas i menyval 9 (mest använda attack, 
+mest använda Pokémon och ratio per Pokémon).
 
 ## Extrainfo 
 
 Vid första körningen finns ingen sparad fil och programmet skapar 6 Pokémon som startdata. Efter att programmet har 
-körts sparas datan i `pokemon.txt` i arbetsmappen och läses igen när man startar programmet på nytt. Efter varje 
-strid sparas resultatet i `stats.txt` i samma mapp. Båda filerna är git-ignorerade via `.gitignore` och ska inte 
-checkas in i repot. 
+körts sparas datan i `pokemon.json` i arbetsmappen och läses igen när man startar programmet på nytt. Efter varje 
+strid sparas resultatet i `stats.json` i samma mapp. Båda filerna är git-ignorerade via `.gitignore` och ska 
+inte checkas in i repot. 
 
 När en strid är avslutad läks spelarens Pokémon tillbaka till maxHp, därför visar listan full HP efter en avslutad
 strid. 
