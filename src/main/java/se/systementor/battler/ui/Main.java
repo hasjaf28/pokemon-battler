@@ -65,11 +65,7 @@ public class Main {
                         BattleMenu.startBattle(input, pokedex, stats);
                         StatsRepository.saveStats(statsPath, stats);
                     }
-                    case 9 -> {
-                        System.out.println("===== Stridsresultat =====");
-                        System.out.println("Vinster: " + stats.getWins());
-                        System.out.println("Förluster: " + stats.getLosses());
-                    }
+                    case 9 -> showStats(stats);
                     case 10 -> running = false;
                 }
             } catch (NoSuchElementException e) {
@@ -248,6 +244,26 @@ public class Main {
         } else {
             System.out.println("Återställningen avbröts!");
             return pokedex;
+        }
+    }
+
+    public static void showStats(BattleStats stats) {
+        System.out.println("===== Stridsresultat =====");
+        System.out.println("Vinster: " + stats.getWins());
+        System.out.println("Förluster: " + stats.getLosses());
+
+        String attack = stats.mostUsedAttack();
+        if (attack == null) {
+            System.out.println("Mest använda attack: Ingen data finns än!");
+        } else {
+            System.out.println("Mest använda attack: " + attack);
+        }
+
+        String pokemon = stats.mostUsedPokemon();
+        if (pokemon == null) {
+            System.out.println("Mest använda Pokémon: Ingen data finns än!");
+        } else {
+            System.out.println("Mest använda Pokémon: " + pokemon);
         }
     }
 }
