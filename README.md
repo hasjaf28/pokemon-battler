@@ -212,7 +212,7 @@ Pokémon med samma namn delar statistik.
 
 ## VG-krav
 
-Alla fyra VG-krav är implementerade: 
+Alla fyra VG-funktionskraven är implementerade och arkitekturen visas sist: 
 
 - **Typeffektivitet:** Tabellen ligger i `Type.damageMultiplier(...)` och `DamageAttack` använder den via 
 `getMultiplier(...)` medan `HealAttack` ärver 1.0 så att läkningen inte påverkas. Loggen visar "supereffektiv" vid 
@@ -225,6 +225,10 @@ inläsning eftersom `Attack` är abstrakt.
 - **Persistent statistik:** `BattleStats` sparar totala vinster och förluster, vinster och förluster per Pokémon 
 och användning per attack. Statistiken finns kvar mellan körningar och visas i menyval 9 (mest använda attack, 
 mest använda Pokémon och ratio per Pokémon).
+- **OOP-arkitektur:** Koden är uppdelad i fyra paket med var sitt ansvar. `Attack` är abstrakt med två subklasser som 
+`BattleService` använder utan att veta vilken sort det är. `AttackData` och `PokemonData` håller isär JSON-formatet 
+från modellklasserna. Det som saknas är att `Main.java` fortfarande har hand om CRUD och menyvalen. Det borde vara 
+mindre vilket är en känd svaghet i den här versionen. 
 
 ## Extrainfo 
 
