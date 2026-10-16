@@ -45,10 +45,14 @@ public class PokemonRepository {
                 return pokedex;
             }
             for (PokemonData data : dataList) {
+                if (data == null) {
+                    System.out.println("Hoppar över en ogiltig post i filen!");
+                    continue;
+                }
                 try {
                     result.add(toPokemon(data));
                 } catch (Exception e) {
-                    System.out.println("Hoppar över den korrupta raden: " + e.getMessage());
+                    System.out.println("Hoppar över " + data.name + ": " + e.getMessage());
                 }
             }
             System.out.println("Pokédexen har laddats från " + path.toAbsolutePath());
