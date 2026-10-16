@@ -22,7 +22,7 @@ public class Main {
 
     public static void main(String[] args) {
         Scanner input = new Scanner(System.in);
-        Path path = Path.of("pokemon.txt");
+        Path path = Path.of("pokemon.json");
 
         ArrayList<Pokemon> pokedex;
         if (Files.exists(path)) {

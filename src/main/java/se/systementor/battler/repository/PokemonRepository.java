@@ -6,30 +6,25 @@ import se.systementor.battler.model.Type;
 import se.systementor.battler.model.DamageAttack;
 import se.systementor.battler.model.HealAttack;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 
 public class PokemonRepository {
+
     public static void saveToFile(Path path, ArrayList<Pokemon> pokedex) {
-        try (BufferedWriter fileWriter = Files.newBufferedWriter(path)) {
-            for (Pokemon pokemon : pokedex) {
-                String attacksPart = "";
-                for (int i = 0; i < pokemon.getAttacks().size(); i++) {
-                    if (i > 0) {
-                        attacksPart = attacksPart + ";";
-                    }
-                    Attack attack = pokemon.getAttacks().get(i);
-                    attacksPart = attacksPart + attack.getName() + ":" +
-                            attack.getType() + ":" + attack.getBaseDamage() + ":" + attack.getAccuracy() +
-                            ":" + attack.getAttackKind();
-                }
-                fileWriter.write(pokemon.getName() + ", " + pokemon.getType() + ", "
-                        + pokemon.getMaxHp() + ", " + pokemon.getCurrentHp() + ", " + attacksPart);
-                fileWriter.newLine();
-            }
+        ArrayList<PokemonData> dataList = new ArrayList<>();
+        for (Pokemon pokemon : pokedex) {
+            dataList.add(toPokemonData(pokemon));
+        }
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(path.toFile(), dataList);
             System.out.println("Pokédexen har sparats till " + path.toAbsolutePath());
         } catch (IOException e) {
             System.out.println("Filen kunde inte sparas: " + e.getMessage());
@@ -42,58 +37,71 @@ public class PokemonRepository {
             return pokedex;
         }
         ArrayList<Pokemon> result = new ArrayList<>();
+        ObjectMapper mapper = new ObjectMapper();
         try {
-            for (String line : Files.readAllLines(path)) {
-                if (line.isBlank()) {
-                    continue;
-                }
-                String[] fields = line.split(", ");
-                if (fields.length != 5) {
-                    System.out.println("Hoppar över den korrupta raden: " + line);
-                    continue;
-                }
+            List<PokemonData> dataList = mapper.readValue(path.toFile(), new TypeReference<List<PokemonData>>() {});
+            if (dataList == null) {
+                System.out.println("Filen innehåller ingen data!");
+                return pokedex;
+            }
+            for (PokemonData data : dataList) {
                 try {
-                    String name = fields[0];
-                    Type type = Type.valueOf(fields[1]);
-                    int maxHp = Integer.parseInt(fields[2]);
-                    int currentHp = Integer.parseInt(fields[3]);
-                    String attacksPart = fields[4];
-
-                    Pokemon pokemon = new Pokemon(name, type, maxHp);
-                    pokemon.setCurrentHp(currentHp);
-
-                    String[] attackParts = attacksPart.split(";");
-                    for (String attackPart : attackParts) {
-                        String[] attack = attackPart.split(":");
-                        if (attack.length != 5) {
-                            throw new IllegalArgumentException("Attacken är korrupt: " + attackPart);
-                        }
-                        String attackName = attack[0];
-                        Type attackType = Type.valueOf(attack[1]);
-                        int baseDamage = Integer.parseInt(attack[2]);
-                        int accuracy = Integer.parseInt(attack[3]);
-                        String attackKind = attack[4];
-
-                        Attack newAttack;
-                        if (attackKind.equals("Damage")) {
-                            newAttack = new DamageAttack(attackName, attackType, baseDamage, accuracy);
-                        } else if (attackKind.equals("Heal")) {
-                            newAttack = new HealAttack(attackName, attackType, baseDamage, accuracy);
-                        } else {
-                            throw new IllegalArgumentException("Attacken är okänd: " + attackKind);
-                        }
-                        pokemon.getAttacks().add(newAttack);
-                    }
-                    result.add(pokemon);
+                    result.add(toPokemon(data));
                 } catch (Exception e) {
-                    System.out.println("Hoppar över den korrupta raden: " + line + " (" + e.getMessage() + ")");
+                    System.out.println("Hoppar över den korrupta raden: " + e.getMessage());
                 }
             }
             System.out.println("Pokédexen har laddats från " + path.toAbsolutePath());
         } catch (IOException e) {
             System.out.println("Filen kunde inte läsas: " + e.getMessage());
+            return pokedex;
         }
         return result;
+    }
+
+    private static AttackData toAttackData(Attack attack) {
+        AttackData data = new AttackData();
+        data.name = attack.getName();
+        data.type = attack.getType();
+        data.baseDamage = attack.getBaseDamage();
+        data.accuracy = attack.getAccuracy();
+        data.kind = attack.getAttackKind();
+        return data;
+    }
+
+    private static PokemonData toPokemonData(Pokemon pokemon) {
+        PokemonData data = new PokemonData();
+        data.name = pokemon.getName();
+        data.type = pokemon.getType();
+        data.maxHp = pokemon.getMaxHp();
+        data.currentHp = pokemon.getCurrentHp();
+        data.attacks = new ArrayList<>();
+        for (Attack attack : pokemon.getAttacks()) {
+            data.attacks.add(toAttackData(attack));
+        }
+        return data;
+    }
+
+    private static Attack toAttack(AttackData data) {
+        if ("Damage".equals(data.kind)) {
+            return new DamageAttack(data.name, data.type, data.baseDamage, data.accuracy);
+        } else if ("Heal".equals(data.kind)) {
+            return new HealAttack(data.name, data.type, data.baseDamage, data.accuracy);
+        } else {
+            throw new IllegalArgumentException("Okänd attacktyp: " + data.kind);
+        }
+    }
+
+    private static Pokemon toPokemon(PokemonData data) {
+        if (data.attacks == null) {
+            throw new IllegalArgumentException("Attacklistan saknas!");
+        }
+        Pokemon pokemon = new Pokemon(data.name, data.type, data.maxHp);
+        pokemon.setCurrentHp(data.currentHp);
+        for (AttackData attackData : data.attacks) {
+            pokemon.getAttacks().add(toAttack(attackData));
+        }
+        return pokemon;
     }
 
     public static ArrayList<Pokemon> createSeedData() {
