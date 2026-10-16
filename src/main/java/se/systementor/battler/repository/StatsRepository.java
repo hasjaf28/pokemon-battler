@@ -24,7 +24,12 @@ public class StatsRepository {
         }
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue(path.toFile(), BattleStats.class);
+            BattleStats result = mapper.readValue(path.toFile(), BattleStats.class);
+            if (result == null) {
+                System.out.println("Filen innehåller ingen statistik!");
+                return new BattleStats(0, 0);
+            }
+            return result;
         }catch (IOException e) {
             System.out.println("Kunde inte läsa statistiken: " + e.getMessage());
             return new BattleStats(0, 0);

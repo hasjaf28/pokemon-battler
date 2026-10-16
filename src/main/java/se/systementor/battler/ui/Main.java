@@ -27,7 +27,6 @@ public class Main {
         ArrayList<Pokemon> pokedex;
         if (Files.exists(path)) {
             pokedex = PokemonRepository.loadFromFile(path, new ArrayList<>());
-            System.out.println("Sparad pokémondata hittades och lästes in");
         } else {
             pokedex = PokemonRepository.createSeedData();
             System.out.println("Inget sparad pokémondata hittades därför fyller pokédexen på med startdata!");
