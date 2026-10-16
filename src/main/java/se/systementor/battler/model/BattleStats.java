@@ -46,6 +46,8 @@ public class BattleStats {
     }
 
     public void setWinsPerPokemon(HashMap<String, Integer> winsPerPokemon) {
+        if (winsPerPokemon == null)
+            throw new IllegalArgumentException("Vinster per Pokémon saknas!");
         this.winsPerPokemon = winsPerPokemon;
     }
 
@@ -54,6 +56,8 @@ public class BattleStats {
     }
 
     public void setLossesPerPokemon(HashMap<String, Integer> lossesPerPokemon) {
+        if (lossesPerPokemon == null)
+            throw new IllegalArgumentException("Förluster per Pokémon saknas!");
         this.lossesPerPokemon = lossesPerPokemon;
     }
 
@@ -62,6 +66,8 @@ public class BattleStats {
     }
 
     public void setAttackUsage(HashMap<String, Integer> attackUsage) {
+        if (attackUsage == null)
+            throw new IllegalArgumentException("Statistik för attacker saknas!");
         this.attackUsage = attackUsage;
     }
 
